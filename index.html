@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>San Rafael · Mendoza · Julio 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:   #0a0c0f;
+  --white: #f2f0eb;
+  --gold:  #c8a96e;
+  --ice:   #8bb8d4;
+  --mist:  rgba(242,240,235,0.07);
+  --glass: rgba(10,12,15,0.55);
+  --sans:  'DM Sans', sans-serif;
+  --serif: 'Cormorant Garamond', serif;
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--sans);
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   LOADER
+   ============================================================ */
+#loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--ink);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 1.5rem;
+  transition: opacity .8s ease, visibility .8s;
+}
+#loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.loader-wordmark {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 7vw, 3rem);
+  font-weight: 300;
+  letter-spacing: .35em;
+  color: var(--white);
+  opacity: 0;
+  animation: fadeUp .9s .3s forwards;
+}
+.loader-line {
+  width: 0; height: 1px;
+  background: var(--gold);
+  animation: expandLine 1s .6s forwards;
+}
+.loader-sub {
+  font-size: .65rem; letter-spacing: .25em;
+  color: var(--gold); text-transform: uppercase;
+  opacity: 0; animation: fadeUp .7s 1s forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(14px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes expandLine {
+  from { width: 0; }
+  to   { width: min(220px, 55vw); }
+}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+  padding: 1rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  background: transparent;
+  transition: background .5s, backdrop-filter .5s;
+}
+nav.scrolled {
+  background: var(--glass);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(200,169,110,.15);
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 1.1rem; font-weight: 300;
+  letter-spacing: .2em; color: var(--white);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 1.2rem; }
+.nav-links a {
+  font-size: .65rem; letter-spacing: .15em; text-transform: uppercase;
+  color: rgba(242,240,235,.7); text-decoration: none;
+  transition: color .3s;
+}
+.nav-links a:hover { color: var(--gold); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+#hero {
+  position: relative; height: 100svh; min-height: 600px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  overflow: hidden; text-align: center;
+}
+
+.hero-video-wrap {
+  position: absolute; inset: 0; z-index: 0;
+}
+.hero-video-wrap video,
+.hero-video-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(.45) saturate(1.2);
+}
+
+/* Gradient vignette */
+.hero-video-wrap::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 70%, transparent 30%, rgba(10,12,15,.8) 100%),
+    linear-gradient(to bottom, rgba(10,12,15,.4) 0%, transparent 30%, transparent 60%, rgba(10,12,15,.9) 100%);
+}
+
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 0 1.5rem;
+  display: flex; flex-direction: column;
+  align-items: center; gap: .8rem;
+}
+
+.hero-eyebrow {
+  font-size: .6rem; letter-spacing: .4em; text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0; transform: translateY(20px);
+}
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 14vw, 8rem);
+  font-weight: 300; line-height: .95;
+  color: var(--white);
+  opacity: 0; transform: translateY(30px);
+}
+.hero-title em {
+  display: block; font-style: italic;
+  color: var(--gold);
+  font-size: clamp(2.2rem, 10vw, 6rem);
+}
+.hero-date {
+  font-size: clamp(.8rem, 3vw, 1rem);
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--ice);
+  opacity: 0; transform: translateY(20px);
+}
+.btn-hero {
+  margin-top: .8rem;
+  padding: .85rem 2.2rem;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--white);
+  font-family: var(--sans); font-size: .7rem;
+  letter-spacing: .2em; text-transform: uppercase;
+  cursor: pointer; border-radius: 50px;
+  position: relative; overflow: hidden;
+  opacity: 0; transform: translateY(20px);
+  transition: color .4s;
+  text-decoration: none; display: inline-block;
+}
+.btn-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--gold); transform: scaleX(0);
+  transform-origin: left; transition: transform .4s ease;
+  z-index: -1;
+}
+.btn-hero:hover::before { transform: scaleX(1); }
+.btn-hero:hover { color: var(--ink); }
+
+.scroll-arrow {
+  position: absolute; bottom: 2rem; left: 50%;
+  transform: translateX(-50%);
+  z-index: 2; display: flex; flex-direction: column; align-items: center; gap: .3rem;
+  opacity: 0; animation: arrowFade 1s 2.5s forwards;
+}
+.scroll-arrow span {
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, transparent, var(--gold));
+  animation: scrollLine 1.5s 2.5s infinite;
+}
+.scroll-arrow p {
+  font-size: .55rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--gold);
+}
+@keyframes arrowFade { to { opacity: 1; } }
+@keyframes scrollLine {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  50%  { transform: scaleY(1); transform-origin: top; }
+  51%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ============================================================
+   SECTION HEADERS
+   ============================================================ */
+.section-label {
+  font-size: .6rem; letter-spacing: .35em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: .6rem;
+}
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 8vw, 4rem);
+  font-weight: 300; line-height: 1.1;
+  color: var(--white);
+}
+.section-title em { font-style: italic; color: var(--ice); }
+
+/* ============================================================
+   INTRO STRIP
+   ============================================================ */
+#intro {
+  padding: 6rem 1.5rem;
+  max-width: 480px; margin: 0 auto;
+  text-align: center;
+}
+#intro .big-quote {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 6vw, 2.8rem);
+  font-weight: 300; line-height: 1.35;
+  color: var(--white);
+}
+#intro .big-quote em { color: var(--gold); font-style: italic; }
+#intro p {
+  margin-top: 1.5rem;
+  font-size: .85rem; line-height: 1.8;
+  color: rgba(242,240,235,.55);
+}
+
+/* ============================================================
+   INCLUDES BAND
+   ============================================================ */
+#includes {
+  display: flex; overflow-x: auto;
+  gap: 1px; background: rgba(242,240,235,.08);
+  scrollbar-width: none;
+}
+#includes::-webkit-scrollbar { display: none; }
+.include-item {
+  flex: 0 0 calc(33.33% - 1px); min-width: 120px;
+  padding: 1.6rem 1rem; text-align: center;
+  background: var(--ink);
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+}
+.include-icon { font-size: 1.6rem; }
+.include-label {
+  font-size: .6rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--gold);
+  line-height: 1.4;
+}
+.include-value {
+  font-family: var(--serif); font-size: 1.1rem;
+  color: var(--white);
+}
+
+/* ============================================================
+   ITINERARY TIMELINE
+   ============================================================ */
+#itinerary {
+  padding: 5rem 1.5rem;
+  max-width: 520px; margin: 0 auto;
+}
+#itinerary .section-header { margin-bottom: 3rem; }
+
+.day-card {
+  position: relative; margin-bottom: 3.5rem;
+  opacity: 0; transform: translateY(40px);
+}
+
+.day-card.visible {
+  opacity: 1; transform: translateY(0);
+  transition: opacity .8s ease, transform .8s ease;
+}
+
+/* vertical timeline line */
+.day-card::before {
+  content: ''; position: absolute;
+  left: -1.5rem; top: 2.4rem; bottom: -3.5rem;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+}
+.day-card:last-child::before { display: none; }
+
+.day-dot {
+  position: absolute; left: -1.85rem; top: 1.8rem;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 10px var(--gold);
+}
+
+.day-header {
+  display: flex; align-items: baseline; gap: .8rem;
+  margin-bottom: 1rem;
+}
+.day-number {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 10vw, 4.5rem);
+  font-weight: 300; line-height: 1;
+  color: rgba(242,240,235,.12);
+}
+.day-info { display: flex; flex-direction: column; gap: .1rem; }
+.day-name {
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 5vw, 1.8rem);
+  font-weight: 300; color: var(--white);
+}
+.day-date {
+  font-size: .6rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--gold);
+}
+
+/* Day hero image */
+.day-image {
+  width: 100%; height: 200px; object-fit: cover;
+  border-radius: 12px; margin-bottom: 1.2rem;
+  filter: brightness(.75) saturate(1.3);
+}
+
+/* Events list */
+.event-list { display: flex; flex-direction: column; gap: .9rem; }
+
+.event {
+  display: flex; gap: .9rem; align-items: flex-start;
+  padding: .85rem 1rem;
+  background: var(--mist);
+  border: 1px solid rgba(242,240,235,.07);
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: border-color .3s, background .3s;
+}
+.event:hover {
+  border-color: rgba(200,169,110,.3);
+  background: rgba(200,169,110,.07);
+}
+
+.event-time {
+  font-size: .6rem; letter-spacing: .08em;
+  color: var(--gold); white-space: nowrap;
+  min-width: 3.2rem; padding-top: .1rem;
+}
+.event-icon { font-size: 1rem; flex-shrink: 0; }
+.event-body { flex: 1; }
+.event-title {
+  font-size: .82rem; font-weight: 400;
+  color: var(--white); line-height: 1.3;
+}
+.event-note {
+  font-size: .7rem; color: rgba(242,240,235,.45);
+  margin-top: .2rem; line-height: 1.5;
+}
+
+/* activity chips */
+.activity-chips {
+  display: flex; flex-wrap: wrap; gap: .4rem;
+  margin-top: .6rem;
+}
+.chip {
+  font-size: .6rem; letter-spacing: .08em;
+  padding: .25rem .65rem;
+  border: 1px solid rgba(139,184,212,.3);
+  border-radius: 50px; color: var(--ice);
+}
+
+/* info box */
+.info-box {
+  margin-top: 1rem;
+  padding: .9rem 1rem;
+  background: rgba(139,184,212,.06);
+  border-left: 2px solid var(--ice);
+  border-radius: 0 8px 8px 0;
+  font-size: .75rem; line-height: 1.7;
+  color: rgba(242,240,235,.6);
+}
+.info-box strong { color: var(--ice); display: block; margin-bottom: .2rem; }
+
+/* ============================================================
+   PHOTO CAROUSEL
+   ============================================================ */
+#gallery {
+  padding: 4rem 0;
+  overflow: hidden;
+}
+#gallery .section-header { padding: 0 1.5rem; margin-bottom: 2rem; }
+
+.carousel-track {
+  display: flex; gap: .8rem;
+  overflow-x: auto; padding: 0 1.5rem 1rem;
+  scrollbar-width: none; scroll-snap-type: x mandatory;
+}
+.carousel-track::-webkit-scrollbar { display: none; }
+
+.carousel-slide {
+  flex: 0 0 260px; height: 340px;
+  border-radius: 14px; overflow: hidden;
+  scroll-snap-align: start; position: relative;
+}
+.carousel-slide img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(.8) saturate(1.2);
+  transition: filter .4s, transform .6s;
+}
+.carousel-slide:hover img { filter: brightness(1) saturate(1.4); transform: scale(1.04); }
+
+.slide-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 1.5rem 1rem .8rem;
+  background: linear-gradient(to top, rgba(10,12,15,.9), transparent);
+  font-size: .65rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ============================================================
+   LINKS SECTION
+   ============================================================ */
+#links {
+  padding: 5rem 1.5rem;
+  max-width: 520px; margin: 0 auto;
+}
+#links .section-header { margin-bottom: 2.5rem; }
+
+.links-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .8rem;
+}
+.link-card {
+  display: flex; flex-direction: column; gap: .4rem;
+  padding: 1.3rem 1rem;
+  background: var(--mist);
+  border: 1px solid rgba(242,240,235,.08);
+  border-radius: 14px;
+  text-decoration: none;
+  transition: border-color .3s, transform .3s;
+  cursor: pointer;
+}
+.link-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-3px);
+}
+.link-card-icon { font-size: 1.4rem; }
+.link-card-label {
+  font-size: .55rem; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--gold);
+}
+.link-card-title {
+  font-size: .8rem; color: var(--white); font-weight: 400;
+  line-height: 1.3;
+}
+.link-card.full { grid-column: 1 / -1; flex-direction: row; align-items: center; }
+.link-card.full .link-card-icon { font-size: 1.8rem; }
+
+/* ============================================================
+   NOTES SECTION
+   ============================================================ */
+#notes {
+  padding: 4rem 1.5rem;
+  max-width: 520px; margin: 0 auto;
+}
+.note-card {
+  padding: 1.2rem 1.2rem 1.2rem 1.5rem;
+  border-left: 2px solid var(--gold);
+  background: rgba(200,169,110,.05);
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 1rem;
+  font-size: .8rem; line-height: 1.75;
+  color: rgba(242,240,235,.65);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  padding: 4rem 1.5rem 5rem;
+  text-align: center; border-top: 1px solid rgba(242,240,235,.07);
+}
+footer .footer-logo {
+  font-family: var(--serif);
+  font-size: 2rem; font-weight: 300;
+  letter-spacing: .3em; color: var(--white);
+  margin-bottom: .4rem;
+}
+footer .footer-sub {
+  font-size: .6rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 1.8rem;
+}
+footer .footer-links {
+  display: flex; justify-content: center; gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+footer .footer-links a {
+  font-size: .65rem; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(242,240,235,.4);
+  text-decoration: none; transition: color .3s;
+}
+footer .footer-links a:hover { color: var(--gold); }
+footer .footer-copy {
+  font-size: .6rem; color: rgba(242,240,235,.2);
+  letter-spacing: .08em;
+}
+
+/* ============================================================
+   GSAP HIDDEN STATE
+   ============================================================ */
+.gsap-hidden { opacity: 0; transform: translateY(30px); }
+
+/* ============================================================
+   AUDIO BUTTON
+   ============================================================ */
+#audio-btn {
+  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 900;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--glass);
+  border: 1px solid rgba(200,169,110,.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 1rem;
+  color: var(--gold);
+  transition: border-color .3s, transform .2s;
+}
+#audio-btn:hover { border-color: var(--gold); transform: scale(1.1); }
+
+/* ============================================================
+   PARALLAX HERO LAYERS
+   ============================================================ */
+.parallax-layer {
+  position: absolute; inset: -10%;
+  will-change: transform;
+}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.text-center { text-align: center; }
+.mt-sm { margin-top: .5rem; }
+.mt-md { margin-top: 1rem; }
+
+/* Mobile safe area */
+@supports(padding: max(0px)) {
+  body { padding-bottom: env(safe-area-inset-bottom); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     LOADER
+     ============================================================ -->
+<div id="loader">
+  <p class="loader-wordmark">SAN RAFAEL</p>
+  <div class="loader-line"></div>
+  <p class="loader-sub">Mendoza · Julio 2025</p>
+</div>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav id="navbar">
+  <a class="nav-logo" href="#hero">SR</a>
+  <div class="nav-links">
+    <a href="#itinerary">Itinerario</a>
+    <a href="#gallery">Fotos</a>
+    <a href="#links">Links</a>
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section id="hero">
+  <div class="hero-video-wrap">
+    <!-- 
+      VIDEO HERO: Reemplazar src con un video MP4 tuyo o de stock.
+      Recomendaciones gratuitas:
+        - https://www.pexels.com/video/aerial-view-of-mountains-5788953/
+        - https://www.pexels.com/search/videos/mendoza/
+      Descargalo y ponlo en la misma carpeta como "hero.mp4"
+    -->
+    <img
+      src="https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=900&q=80"
+      alt="San Rafael Mendoza"
+      class="parallax-layer" id="hero-img"
+    />
+    <!-- Uncomment when tengas el video:
+    <video class="parallax-layer" autoplay muted loop playsinline preload="auto" poster="hero-poster.jpg">
+      <source src="hero.mp4" type="video/mp4"/>
+    </video>
+    -->
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow" id="h-eyebrow">Viaje a · 10 al 14 de Julio</p>
+    <h1 class="hero-title" id="h-title">
+      San Rafael<br/>
+      <em>Mendoza</em>
+    </h1>
+    <p class="hero-date" id="h-date">Viernes 10 → Martes 14 · 2025</p>
+    <a href="#itinerary" class="btn-hero" id="h-btn">Ver itinerario</a>
+  </div>
+
+  <div class="scroll-arrow">
+    <p>Descubrir</p>
+    <span></span>
+  </div>
+</section>
+
+<!-- ============================================================
+     INTRO
+     ============================================================ -->
+<section id="intro">
+  <p class="section-label gsap-hidden">La experiencia</p>
+  <p class="big-quote gsap-hidden">
+    Vinos, <em>nieve, naturaleza</em> y aventura en el corazón de Mendoza.
+  </p>
+  <p class="gsap-hidden">
+    Cinco días de experiencias únicas: bodegas boutique, la majestuosa cordillera en Las Leñas, 
+    aguas del Atuel, aventura en Los Reyunos y el encanto de San Rafael. 
+    Un viaje diseñado para quienes buscan <em style="color:var(--gold)">vivir algo inolvidable</em>.
+  </p>
+</section>
+
+<!-- ============================================================
+     INCLUDES BAND
+     ============================================================ -->
+<div id="includes">
+  <div class="include-item">
+    <div class="include-icon">🚌</div>
+    <div class="include-label">Transporte</div>
+    <div class="include-value">Ida & Vuelta</div>
+  </div>
+  <div class="include-item">
+    <div class="include-icon">🏨</div>
+    <div class="include-label">Alojamiento</div>
+    <div class="include-value">3 noches</div>
+  </div>
+  <div class="include-item">
+    <div class="include-icon">☕</div>
+    <div class="include-label">Desayuno</div>
+    <div class="include-value">Incluido</div>
+  </div>
+  <div class="include-item">
+    <div class="include-icon">🗺️</div>
+    <div class="include-label">Excursiones</div>
+    <div class="include-value">Indicadas</div>
+  </div>
+  <div class="include-item">
+    <div class="include-icon">📡</div>
+    <div class="include-label">Coordinación</div>
+    <div class="include-value">Permanente</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     ITINERARY
+     ============================================================ -->
+<section id="itinerary">
+  <div class="section-header gsap-hidden">
+    <p class="section-label">Día a día</p>
+    <h2 class="section-title">El <em>Itinerario</em></h2>
+  </div>
+
+  <!-- ---- DÍA 1: VIERNES 10 ---- -->
+  <div class="day-card" data-day="1">
+    <div class="day-dot"></div>
+    <div class="day-header">
+      <span class="day-number">01</span>
+      <div class="day-info">
+        <span class="day-name">Viernes</span>
+        <span class="day-date">10 de Julio · Salida</span>
+      </div>
+    </div>
+    <!-- Imagen del día: reemplazar src por imagen local si querés -->
+    <img
+      src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=700&q=80"
+      alt="Micro de viaje nocturno"
+      class="day-image"
+      loading="lazy"
+    />
+    <div class="event-list">
+      <div class="event">
+        <span class="event-time">16:00 hs</span>
+        <span class="event-icon">🚌</span>
+        <div class="event-body">
+          <p class="event-title">Salida desde puntos acordados</p>
+          <p class="event-note">El horario puede variar según el punto de partida.</p>
+        </div>
+      </div>
+      <div class="event">
+        <span class="event-time">22:00 hs</span>
+        <span class="event-icon">🍽️</span>
+        <div class="event-body">
+          <p class="event-title">Parada en comedor de ruta</p>
+          <p class="event-note">Cena opcional — no incluida.</p>
+        </div>
+      </div>
+      <div class="event">
+        <span class="event-time">Noche</span>
+        <span class="event-icon">🌙</span>
+        <div class="event-body">
+          <p class="event-title">Continuamos viaje nocturno rumbo a Mendoza</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- DÍA 2: SÁBADO 11 ---- -->
+  <div class="day-card" data-day="2">
+    <div class="day-dot"></div>
+    <div class="day-header">
+      <span class="day-number">02</span>
+      <div class="day-info">
+        <span class="day-name">Sábado</span>
+        <span class="day-date">11 de Julio · Bodegas & Aventura</span>
+      </div>
+    </div>
+    <img
+      src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=700&q=80"
+      alt="Bodega La Abeja San Rafael"
+      class="day-image"
+      loading="lazy"
+    />
+    <div class="event-list">
+      <div class="event">
+        <span class="event-time">09:30 hs</span>
+        <span class="event-icon">📍</span>
+        <div class="event-body">
+          <p class="event-title">Llegada estimada a San Rafael</p>
+        </div>
+      </div>
+      <div class="event">
+        <span class="event-time">10:00 hs</span>
+        <span class="event-icon">🍷</span>
+        <div class="event-body">
+          <p class="event-title">Visita a Bodega La Abeja</p>
+          <p class="event-note">Degustación incluida.</p>
+        </div>
+      </div>
+      <div class="event">
+        <span class="event-time">12:00 hs</span>
+        <span class="event-icon">⛺</span>
+        <div class="event-body">
+          <p class="event-title">Camping Kaike — Los Reyunos</p>
+          <p class="event-note">Incluye únicamente traslado al predio.</p>
+          <div class="activity-chips">
+            <span class="chip">🍔 Almuerzo</span>
+            <span class="chip">🪂 Tirobang</span>
+            <span class="chip">⛵ Catamarán</span>
+            <span class="chip">🐴 Cabalgatas</span>
+            <span class="chip">🛶 Canoa</span>
+            <span class="chip">🚣 Kayak</span>
+            <span class="chip">✨ Y más</span>
+          </div>
+        </div>
+      </div>
+      <div class="event">
+        <span class="event-time">17:00 hs</span>
+        <span class="event-icon">🔙</span>
+        <div class="event-body">
+          <p class="event-title">Regreso desde el camping</p>
+        </div>
+      </div>
+      <div class="event">
+        <span class="event-time">17:30 hs</span>
+        <span class="event-icon">🧣</span>
+        <div class="event-body">
+          <p class="event-title">Alquiler de trajes para la nieve</p>
+        </div>
+      </div>
+      <div class="event">
+        <span class="event-time">18:30 hs</span>
+        <span class="event-icon">🏨</span>
+        <div class="event-body">
+          <p class="event-title">Check-in en el hotel</p>
+          <p class="event-note">Noche libre en San Rafael.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- DÍA 3: DOMINGO 12 ---- -->
+  <div class="day-card" data-day="3">
+    <div class="day-dot"></div>
+    <div class="day-header">
+      <span class="day-number">03</span>
+      <div class="day-info">
+        <span class="day-name">Domingo</span>
+        <span class="day-date">12 de Julio · Las Leñas ❄️</span>
+      </div>
+    </div>
+    <img
+      src="https://images.unsplash.com/photo-1551524559-8af4e6624178?w=700&q=80"
+      alt="Las Leñas nieve"
+      class="day-image"
+      loading="lazy"
+    />
+    <div class="event-list">
+      <div class="event">
+        <span class="event-time">06:30 hs</span>
+        <span class="event-icon">🚌</span>
+        <div class="event-body">
+          <p class="event-title">Salida hacia Base Las Leñas</p>
+        </div>
+      </div>
+      <div class="event">
+        <span class="event-time">10:00 hs</span>
+        <span class="event-icon">⛰️</span>
+        <div class="event-body">
+          <p class="event-title">Llegada aproximada a la base</p>
+          <div class="activity-chips">
+            <span class="chip">❄️ Sectores con nieve</span>
+            <span class="chip">🍴 Comedores</span>
+            <span class="chip">🛷 Culipatín sin costo</span>
+            <span class="chip">🎿 Ski (opcional)</span>
+          </div>
+        </div>
+      </div>
+      <div class="info-box">
+        <strong>⚠️ Pases de Ski</strong>
+        Los pases de ski deben adquirirse previamente en la página oficial de Las Leñas.
+      </div>
+      <div class="event">
+        <span class="event-time">17:00 hs</span>
+        <span class="event-icon">🔙</span>
+        <div class="event-body">
+          <p class="event-title">Regreso desde Las Leñas</p>
+        </div>
+      </div>
+      <div class="event">
+        <span class="event-time">20:30 hs</span>
+        <span class="event-icon">📍</span>
+        <div class="event-body">
+          <p class="event-title">Llegada aproximada a San Rafael</p>
+          <p class="event-note">Noche libre.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- DÍA 4: LUNES 13 ---- -->
+  <div class="day-card" data-day="4">
+    <div class="day-dot"></div>
+    <div class="day-header">
+      <span class="day-number">04</span>
+      <div class="day-info">
+        <span class="day-name">Lunes</span>
+        <span class="day-date">13 de Julio · Día Libre</span>
+      </div>
+    </div>
+    <img
+      src="https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=700&q=80"
+      alt="Cañón del Atuel Mendoza"
+      class="day-image"
+      loading="lazy"
+    />
+    <div class="event-list">
+      <div class="event">
+        <span class="event-time">Todo el día</span>
+        <span class="event-icon">🗓️</span>
+        <div class="event-body">
+          <p class="event-title">Día libre</p>
+          <p class="event-note">Descansar o realizar excursiones opcionales.</p>
+          <div class="activity-chips">
+            <span class="chip">🍷 Más bodegas</span>
+            <span class="chip">🏔️ Cañón del Atuel</span>
+            <span class="chip">💧 El Nihuil</span>
+            <span class="chip">🛍️ Shopping</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- DÍA 5: MARTES 14 ---- -->
+  <div class="day-card" data-day="5">
+    <div class="day-dot"></div>
+    <div class="day-header">
+      <span class="day-number">05</span>
+      <div class="day-info">
+        <span class="day-name">Martes</span>
+        <span class="day-date">14 de Julio · Regreso</span>
+      </div>
+    </div>
+    <img
+      src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=700&q=80"
+      alt="Regreso en micro por la ruta"
+      class="day-image"
+      loading="lazy"
+    />
+    <div class="event-list">
+      <div class="event">
+        <span class="event-time">09:00 hs</span>
+        <span class="event-icon">🧳</span>
+        <div class="event-body">
+          <p class="event-title">Salida del hotel y comienzo del regreso</p>
+        </div>
+      </div>
+      <div class="event">
+        <span class="event-time">~01:00 am</span>
+        <span class="event-icon">🏠</span>
+        <div class="event-body">
+          <p class="event-title">Llegada estimada a destino — 15 de Julio</p>
+          <p class="event-note">Dependiendo de cada punto de descenso.</p>
+        </div>
+      </div>
+    </div>
+    <div class="info-box">
+      <strong>📋 Itinerario aproximado</strong>
+      Los horarios pueden variar por cuestiones climáticas, tránsito y organización del viaje.
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     GALLERY CAROUSEL
+     ============================================================ -->
+<section id="gallery">
+  <div class="section-header gsap-hidden">
+    <p class="section-label">Destinos</p>
+    <h2 class="section-title">Lugares <em>increíbles</em></h2>
+  </div>
+
+  <div class="carousel-track" id="carousel">
+    <!-- 
+      IMÁGENES DEL CARRUSEL
+      Reemplazá estos src por fotos tuyas o descargalas de:
+        - https://unsplash.com
+        - https://www.pexels.com
+      Guardá en la carpeta /img/ y ponés: src="img/nombre.jpg"
+    -->
+    <div class="carousel-slide">
+      <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&q=75" alt="Bodega La Abeja" loading="lazy"/>
+      <p class="slide-caption">Bodega La Abeja</p>
+    </div>
+    <div class="carousel-slide">
+      <img src="https://images.unsplash.com/photo-1551524559-8af4e6624178?w=600&q=75" alt="Las Leñas" loading="lazy"/>
+      <p class="slide-caption">Las Leñas ❄️</p>
+    </div>
+    <div class="carousel-slide">
+      <img src="https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=600&q=75" alt="Cañón del Atuel" loading="lazy"/>
+      <p class="slide-caption">Cañón del Atuel</p>
+    </div>
+    <div class="carousel-slide">
+      <img src="https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=600&q=75" alt="Cordillera Mendoza" loading="lazy"/>
+      <p class="slide-caption">Cordillera</p>
+    </div>
+    <div class="carousel-slide">
+      <img src="https://images.unsplash.com/photo-1504279577054-acfeccf8fc52?w=600&q=75" alt="El Nihuil" loading="lazy"/>
+      <p class="slide-caption">El Nihuil</p>
+    </div>
+    <div class="carousel-slide">
+      <img src="https://images.unsplash.com/photo-1559598834-89c49aa17379?w=600&q=75" alt="Los Reyunos" loading="lazy"/>
+      <p class="slide-caption">Los Reyunos</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     LINKS
+     ============================================================ -->
+<section id="links">
+  <div class="section-header gsap-hidden">
+    <p class="section-label">Reservas & Info</p>
+    <h2 class="section-title">Links <em>útiles</em></h2>
+  </div>
+
+  <div class="links-grid">
+    <!-- 
+      WHATSAPP: Reemplazá el número 5492604000000 por el real.
+      Formato: 549 + código de área + número (sin 0 ni 15)
+    -->
+    <a class="link-card full"
+       href="https://wa.me/5492604000000?text=Hola!%20Quiero%20reservar%20el%20viaje%20a%20San%20Rafael"
+       target="_blank">
+      <div class="link-card-icon">💬</div>
+      <div>
+        <p class="link-card-label">Reservar ahora</p>
+        <p class="link-card-title">WhatsApp · Consultas y reservas</p>
+      </div>
+    </a>
+
+    <a class="link-card"
+       href="https://www.lasleñas.com"
+       target="_blank">
+      <div class="link-card-icon">🎿</div>
+      <p class="link-card-label">Ski passes</p>
+      <p class="link-card-title">Las Leñas Oficial</p>
+    </a>
+
+    <a class="link-card"
+       href="https://maps.google.com/?q=Las+Le%C3%B1as+Mendoza+Argentina"
+       target="_blank">
+      <div class="link-card-icon">📍</div>
+      <p class="link-card-label">Mapa</p>
+      <p class="link-card-title">Las Leñas en Maps</p>
+    </a>
+
+    <a class="link-card"
+       href="https://maps.google.com/?q=Ca%C3%B1%C3%B3n+del+Atuel+San+Rafael+Mendoza"
+       target="_blank">
+      <div class="link-card-icon">🏔️</div>
+      <p class="link-card-label">Mapa</p>
+      <p class="link-card-title">Cañón del Atuel</p>
+    </a>
+
+    <a class="link-card"
+       href="https://maps.google.com/?q=Los+Reyunos+San+Rafael+Mendoza"
+       target="_blank">
+      <div class="link-card-icon">💧</div>
+      <p class="link-card-label">Mapa</p>
+      <p class="link-card-title">Los Reyunos</p>
+    </a>
+
+    <!-- 
+      INSTAGRAM: Reemplazá "tuusuario" por el handle real 
+    -->
+    <a class="link-card"
+       href="https://instagram.com/tuusuario"
+       target="_blank">
+      <div class="link-card-icon">📸</div>
+      <p class="link-card-label">Seguinos</p>
+      <p class="link-card-title">Instagram</p>
+    </a>
+
+    <a class="link-card"
+       href="https://maps.google.com/?q=El+Nihuil+Mendoza+Argentina"
+       target="_blank">
+      <div class="link-card-icon">🌊</div>
+      <p class="link-card-label">Mapa</p>
+      <p class="link-card-title">El Nihuil</p>
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================
+     NOTAS IMPORTANTES
+     ============================================================ -->
+<section id="notes">
+  <div class="section-header gsap-hidden">
+    <p class="section-label">A tener en cuenta</p>
+    <h2 class="section-title">Notas <em>del viaje</em></h2>
+  </div>
+  <div class="note-card gsap-hidden">
+    📋 El itinerario es aproximado. Los horarios pueden variar por cuestiones climáticas, tránsito y organización del viaje.
+  </div>
+  <div class="note-card gsap-hidden">
+    🎿 Los pases de ski para aerosillas y pistas de Las Leñas deben adquirirse previamente en la página oficial del complejo.
+  </div>
+  <div class="note-card gsap-hidden">
+    🍽️ La cena del viernes en el comedor de ruta es opcional y no está incluida en el precio.
+  </div>
+  <div class="note-card gsap-hidden">
+    ⛺ El traslado a Camping Kaike (Los Reyunos) incluye únicamente el traslado al predio. Actividades y comidas son opcionales y a cargo del pasajero.
+  </div>
+  <div class="note-card gsap-hidden">
+    🛷 El culipatín en Las Leñas es sin costo. El pase de ski para aerosillas es opcional.
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <p class="footer-logo">San Rafael</p>
+  <p class="footer-sub">Mendoza · 10 al 14 de Julio 2025</p>
+  <div class="footer-links">
+    <a href="#hero">Inicio</a>
+    <a href="#itinerary">Itinerario</a>
+    <a href="#gallery">Galería</a>
+    <a href="#links">Reservas</a>
+  </div>
+  <p class="footer-copy">Vivi una experiencia inolvidable ✦ Coordinación permanente durante el viaje</p>
+</footer>
+
+<!-- ============================================================
+     AUDIO BUTTON (opcional)
+     ============================================================ -->
+<!-- 
+  MÚSICA AMBIENTE: Bajá un MP3 libre de royalties de https://pixabay.com
+  y poné el archivo como "ambient.mp3" en la misma carpeta.
+  Luego descomentá este bloque y el JS correspondiente.
+-->
+<!--
+<button id="audio-btn" title="Música">🎵</button>
+<audio id="ambient-audio" loop preload="none">
+  <source src="ambient.mp3" type="audio/mpeg"/>
+</audio>
+-->
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// ---- LOADER ----
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+    initHeroAnimations();
+  }, 1800);
+});
+
+// ---- HERO ANIMATIONS ----
+function initHeroAnimations() {
+  gsap.registerPlugin(ScrollTrigger);
+
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  tl.to('#h-eyebrow', { opacity: 1, y: 0, duration: .9 })
+    .to('#h-title',   { opacity: 1, y: 0, duration: 1 }, '-=.5')
+    .to('#h-date',    { opacity: 1, y: 0, duration: .8 }, '-=.6')
+    .to('#h-btn',     { opacity: 1, y: 0, duration: .7 }, '-=.5');
+
+  // Parallax hero image
+  gsap.to('#hero-img', {
+    yPercent: 20,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#hero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true
+    }
+  });
+
+  initScrollAnimations();
+  initDayCards();
+}
+
+// ---- SCROLL ANIMATIONS (gsap-hidden) ----
+function initScrollAnimations() {
+  document.querySelectorAll('.gsap-hidden').forEach(el => {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: .9, ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 88%',
+        toggleActions: 'play none none none'
+      }
+    });
+  });
+}
+
+// ---- DAY CARDS ----
+function initDayCards() {
+  document.querySelectorAll('.day-card').forEach((card, i) => {
+    gsap.to(card, {
+      opacity: 1, y: 0, duration: .9, ease: 'power3.out',
+      scrollTrigger: {
+        trigger: card,
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
+    });
+  });
+}
+
+// ---- NAVBAR scroll effect ----
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+// ---- AUDIO TOGGLE (uncomment if using audio) ----
+/*
+const audioBtn  = document.getElementById('audio-btn');
+const audioEl   = document.getElementById('ambient-audio');
+let   playing   = false;
+
+audioBtn.addEventListener('click', () => {
+  if (playing) {
+    audioEl.pause();
+    audioBtn.textContent = '🎵';
+  } else {
+    audioEl.play();
+    audioBtn.textContent = '🔇';
+  }
+  playing = !playing;
+});
+*/
+
+// ---- SMOOTH TOUCH SCROLL for carousel ----
+const carousel = document.getElementById('carousel');
+let isDown = false, startX, scrollLeft;
+
+carousel.addEventListener('mousedown', e => {
+  isDown = true; startX = e.pageX - carousel.offsetLeft;
+  scrollLeft = carousel.scrollLeft;
+});
+carousel.addEventListener('mouseleave', () => isDown = false);
+carousel.addEventListener('mouseup',    () => isDown = false);
+carousel.addEventListener('mousemove',  e => {
+  if (!isDown) return;
+  e.preventDefault();
+  carousel.scrollLeft = scrollLeft - (e.pageX - carousel.offsetLeft - startX) * 1.5;
+});
+</script>
+
+</body>
+</html>
